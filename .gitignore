@@ -1,0 +1,7 @@
+**/bin/
+**/obj/
+*.sys
+*.cat
+*.pdb
+*.ilk
+*.log

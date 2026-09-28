@@ -1,0 +1,62 @@
+;
+; Test-only virtual HID Ambient Light Sensor.
+; Installs a KMDF source driver and the Microsoft VHF lower filter.
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=09/26/2026,1.0.0.0
+CatalogFile=VhfAlsSim.cat
+PnpLockdown=1
+
+[Manufacturer]
+%ProviderName%=Models,NTamd64.10.0...26100
+
+[Models.NTamd64.10.0...26100]
+%DeviceDescription%=VhfAlsSim_Install,Root\AdaptiveBrightnessVhfAls
+
+[VhfAlsSim_Install.NT]
+CopyFiles=VhfAlsSim_CopyFiles
+
+[VhfAlsSim_Install.NT.HW]
+AddReg=VhfAlsSim_LowerFilter
+
+[VhfAlsSim_LowerFilter]
+HKR,,"LowerFilters",0x00010000,"vhf"
+
+[VhfAlsSim_Install.NT.Services]
+AddService=VhfAlsSim,0x00000002,VhfAlsSim_Service
+
+[VhfAlsSim_Service]
+DisplayName=%ServiceDescription%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\VhfAlsSim.sys
+
+[VhfAlsSim_Install.NT.Wdf]
+KmdfService=VhfAlsSim,VhfAlsSim_Wdf
+
+[VhfAlsSim_Wdf]
+KmdfLibraryVersion=1.35
+
+[VhfAlsSim_CopyFiles]
+VhfAlsSim.sys
+
+[DestinationDirs]
+VhfAlsSim_CopyFiles=12
+
+[SourceDisksFiles]
+VhfAlsSim.sys=1
+
+[SourceDisksNames]
+1=%DiskName%
+
+[Strings]
+ProviderName="Adaptive Brightness test tools"
+DeviceDescription="Virtual HID Ambient Light Sensor (test only)"
+ServiceDescription="Adaptive Brightness VHF ALS simulator"
+DiskName="Adaptive Brightness VHF ALS simulator"
